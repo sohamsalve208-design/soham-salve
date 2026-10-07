@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mars Colonization | Soham Salve</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #05060a;
+    color: white;
+    overflow-x: hidden;
+}
+
+/* STARFIELD */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image:
+        radial-gradient(2px 2px at 20px 30px, white, transparent),
+        radial-gradient(1px 1px at 100px 150px, white, transparent),
+        radial-gradient(2px 2px at 300px 80px, white, transparent),
+        radial-gradient(1px 1px at 500px 200px, white, transparent),
+        radial-gradient(2px 2px at 800px 100px, white, transparent),
+        radial-gradient(1px 1px at 1100px 300px, white, transparent);
+    background-size: 900px 500px;
+    opacity: .35;
+    pointer-events: none;
+    z-index: -1;
+}
+
+nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 18px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(5,6,10,.75);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.logo span {
+    color: #ff5b2e;
+}
+
+nav a {
+    color: #ddd;
+    text-decoration: none;
+    margin-left: 25px;
+    font-size: 14px;
+}
+
+nav a:hover {
+    color: #ff6840;
+}
+
+.hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 120px 8% 60px;
+    gap: 40px;
+}
+
+.hero-text {
+    max-width: 650px;
+}
+
+.badge {
+    display: inline-block;
+    border: 1px solid #ff5b2e;
+    color: #ff805f;
+    padding: 8px 14px;
+    border-radius: 30px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    margin-bottom: 25px;
+}
+
+h1 {
+    font-size: clamp(45px, 7vw, 90px);
+    line-height: .95;
+    text-transform: uppercase;
+}
+
+h1 span {
+    color: #ff5b2e;
+}
+
+.hero p {
+    color: #aaa;
+    font-size: 18px;
+    line-height: 1.7;
+    margin: 30px 0;
+}
+
+.btn {
+    display: inline-block;
+    padding: 14px 24px;
+    background: #ff5b2e;
+    color: white;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.btn.secondary {
+    background: transparent;
+    border: 1px solid #555;
+}
+
+/* MARS */
+.mars-container {
+    width: 390px;
+    height: 390px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mars {
+    width: 310px;
+    height: 310px;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 30% 30%, #ff8b5c, #a93622 40%, #55170e 80%);
+    box-shadow:
+        inset -35px -25px 60px rgba(0,0,0,.65),
+        0 0 70px rgba(255,70,30,.25);
+    animation: rotateMars 18s linear infinite;
+}
+
+.orbit {
+    position: absolute;
+    width: 390px;
+    height: 170px;
+    border: 1px solid rgba(255,100,60,.35);
+    border-radius: 50%;
+    transform: rotate(-25deg);
+}
+
+.satellite {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: white;
+    border-radius: 50%;
+    animation: orbit 5s linear infinite;
+}
+
+@keyframes rotateMars {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes orbit {
+    from { transform: rotate(0deg) translateX(195px) rotate(0deg); }
+    to { transform: rotate(360deg) translateX(195px) rotate(-360deg); }
+}
+
+/* SECTIONS */
+section {
+    padding: 100px 8%;
+}
+
+.section-title {
+    font-size: 42px;
+    margin-bottom: 15px;
+}
+
+.section-title span {
+    color: #ff5b2e;
+}
+
+.section-intro {
+    color: #999;
+    max-width: 750px;
+    line-height: 1.7;
+    margin-bottom: 45px;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.08);
+    padding: 30px;
+    border-radius: 18px;
+    transition: .3s;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    border-color: #ff5b2e;
+}
+
+.card .icon {
+    font-size: 35px;
+    margin-bottom: 18px;
+}
+
+.card h3 {
+    margin-bottom: 12px;
+}
+
+.card p {
+    color: #999;
+    line-height: 1.6;
+}
+
+/* AGRICULTURE */
+.agriculture {
+    background: linear-gradient(180deg, transparent, rgba(255,70,30,.04));
+}
+
+.system {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.system-box {
+    padding: 35px;
+    border-radius: 20px;
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.08);
+}
+
+.system-box h3 {
+    color: #ff7650;
+    margin-bottom: 15px;
+    font-size: 25px;
+}
+
+.system-box p {
+    color: #aaa;
+    line-height: 1.7;
+}
+
+/* DASHBOARD */
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.stat {
+    padding: 25px;
+    background: #0b0d13;
+    border: 1px solid #222;
+    border-radius: 15px;
+}
+
+.stat small {
+    color: #777;
+}
+
+.stat strong {
+    display: block;
+    font-size: 32px;
+    margin-top: 10px;
+    color: #ff6840;
+}
+
+/* QR */
+.qr-section {
+    text-align: center;
+    background: radial-gradient(circle, rgba(255,70,30,.12), transparent 60%);
+}
+
+.qr-box {
+    max-width: 600px;
+    margin: auto;
+    padding: 45px;
+    border: 1px solid rgba(255,100,60,.4);
+    border-radius: 25px;
+    background: rgba(255,255,255,.04);
+}
+
+.qr-placeholder {
+    width: 200px;
+    height: 200px;
+    margin: 25px auto;
+    background: white;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* FOOTER */
+footer {
+    text-align: center;
+    padding: 50px 20px;
+    border-top: 1px solid #222;
+    color: #777;
+}
+
+footer strong {
+    color: white;
+}
+
+/* MOBILE */
+@media(max-width: 800px) {
+
+    nav {
+        padding: 15px 5%;
+    }
+
+    nav div:last-child {
+        display: none;
+    }
+
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding-top: 140px;
+    }
+
+    .mars-container {
+        width: 300px;
+        height: 300px;
+    }
+
+    .mars {
+        width: 230px;
+        height: 230px;
+    }
+
+    .orbit {
+        width: 290px;
+    }
+
+    .system {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <div class="logo">MARS<span>MISSION</span></div>
+
+    <div>
+        <a href="#mission">Mission</a>
+        <a href="#systems">Systems</a>
+        <a href="#agriculture">Agriculture</a>
+        <a href="#dashboard">Dashboard</a>
+        <a href="#about">About</a>
+    </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+
+    <div class="hero-text">
+
+        <div class="badge">MARS COLONIZATION PROJECT</div>
+
+        <h1>
+            HUMANITY<br>
+            <span>BEYOND EARTH</span>
+        </h1>
+
+        <p>
+            A conceptual blueprint for establishing a sustainable
+            human presence on Mars through habitat technology,
+            resource management, robotics and space agriculture.
+        </p>
+
+        <a href="#mission" class="btn">EXPLORE MISSION</a>
+        <a href="#agriculture" class="btn secondary">SPACE AGRICULTURE</a>
+
+    </div>
+
+    <div class="mars-container">
+        <div class="mars"></div>
+        <div class="orbit"></div>
+        <div class="satellite"></div>
+    </div>
+
+</header>
+
+
+<!-- MISSION -->
+<section id="mission">
+
+    <h2 class="section-title">
+        THE <span>MARS CHALLENGE</span>
+    </h2>
+
+    <p class="section-intro">
+        Mars presents extreme environmental challenges. A successful
+        settlement requires integrated systems capable of producing
+        food, recycling resources, generating energy and protecting
+        humans from the Martian environment.
+    </p>
+
+    <div class="cards">
+
+        <div class="card">
+            <div class="icon">🌡️</div>
+            <h3>Extreme Environment</h3>
+            <p>
+                Low temperatures, thin atmosphere and harsh surface
+                conditions require protected habitats.
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="icon">☢️</div>
+            <h3>Radiation</h3>
+            <p>
+                Habitat shielding is essential because Mars lacks
+                Earth's strong global magnetic protection.
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="icon">💧</div>
+            <h3>Water</h3>
+            <p>
+                Water must be recovered, recycled and efficiently
+                managed for long-term settlement.
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="icon">🌱</div>
+            <h3>Food</h3>
+            <p>
+                Controlled-environment agriculture can reduce
+                dependence on supplies from Earth.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- SYSTEMS -->
+<section id="systems">
+
+    <h2 class="section-title">
+        MARTIAN <span>SYSTEMS</span>
+    </h2>
+
+    <p class="section-intro">
+        The colony operates as an interconnected ecosystem where
+        every subsystem supports human survival.
+    </p>
+
+    <div class="cards">
+
+        <div class="card">
+            <div class="icon">🏠</div>
+            <h3>Habitat</h3>
+            <p>
+                Pressurized living spaces designed to protect
+                astronauts from the Martian environment.
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="icon">⚡</div>
+            <h3>Energy</h3>
+            <p>
+                Solar and other power systems provide electricity
+                for habitat and scientific operations.
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="icon">🤖</div>
+            <h3>Robotics</h3>
+            <p>
+                Autonomous rovers can support exploration,
+                construction and resource collection.
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="icon">🫁</div>
+            <h3>Life Support</h3>
+            <p>
+                Atmospheric control, oxygen management and
+                recycling systems maintain a habitable environment.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- AGRICULTURE -->
+<section id="agriculture" class="agriculture">
+
+    <h2 class="section-title">
+        SPACE <span>AGRICULTURE</span>
+    </h2>
+
+    <p class="section-intro">
+        Agriculture is one of the key technologies required for
+        long-duration human settlement beyond Earth.
+    </p>
+
+    <div class="system">
+
+        <div class="system-box">
+
+            <h3>🌱 Hydroponics</h3>
+
+            <p>
+                Plants are grown without traditional soil.
+                Nutrient-rich water delivers essential minerals
+                directly to the roots, allowing efficient use of
+                water and growing space.
+            </p>
+
+        </div>
+
+        <div class="system-box">
+
+            <h3>🌿 Aeroponics</h3>
+
+            <p>
+                Plant roots are suspended in an enclosed environment
+                and supplied with nutrient-rich mist. This approach
+                can reduce water consumption and maximize root
+                oxygenation.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- DASHBOARD -->
+<section id="dashboard">
+
+    <h2 class="section-title">
+        MISSION <span>CONTROL</span>
+    </h2>
+
+    <p class="section-intro">
+        A conceptual dashboard representing the major requirements
+        of a future Martian settlement.
+    </p>
+
+    <div class="dashboard">
+
+        <div class="stat">
+            <small>HABITAT</small>
+            <strong>READY</strong>
+        </div>
+
+        <div class="stat">
+            <small>AGRICULTURE</small>
+            <strong>ACTIVE</strong>
+        </div>
+
+        <div class="stat">
+            <small>ROVER</small>
+            <strong>ONLINE</strong>
+        </div>
+
+        <div class="stat">
+            <small>LIFE SUPPORT</small>
+            <strong>STABLE</strong>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ABOUT -->
+<section id="about">
+
+    <h2 class="section-title">
+        THE <span>PROJECT</span>
+    </h2>
+
+    <p class="section-intro">
+        This Mars Colonization concept integrates habitat design,
+        agriculture, robotics, resource management and life-support
+        technologies into one vision for sustainable human
+        exploration of Mars.
+    </p>
+
+    <div class="card">
+
+        <h3>Project by</h3>
+
+        <br>
+
+        <h2>SOHAM SALVE</h2>
+
+        <p>
+            Poddar BRIO International School
+        </p>
+
+        <br>
+
+        <p>
+            Mars Colonization Project<br>
+            Seva First Innovation Challenge
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- QR -->
+<section class="qr-section">
+
+    <div class="qr-box">
+
+        <h2>ENTER THE MARS MISSION</h2>
+
+        <p style="color:#999;margin-top:15px;">
+            Scan the QR code on the physical project display
+            to explore the complete interactive website.
+        </p>
+
+        <div class="qr-placeholder">
+            QR CODE
+        </div>
+
+        <p style="color:#777;">
+            The QR code will be connected after the website
+            is published online.
+        </p>
+
+    </div>
+
+</section>
+
+
+<footer>
+
+    <strong>MARS COLONIZATION</strong>
+
+    <br><br>
+
+    A student innovation project by Soham Salve
+
+    <br><br>
+
+    © 2026 — Mars Mission Project
+
+</footer>
+
+
+<script>
+
+/* Simple mission-control animation */
+
+const stats = document.querySelectorAll(".stat strong");
+
+stats.forEach(stat => {
+
+    stat.style.opacity = "0";
+
+    setTimeout(() => {
+        stat.style.transition = "opacity 1s";
+        stat.style.opacity = "1";
+    }, 500);
+
+});
+
+</script>
+
+</body>
+</html>
